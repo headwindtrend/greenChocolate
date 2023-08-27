@@ -12,9 +12,13 @@ greenChocolate's advantages over an ordinary youtube playlist are:
 
 i've tested it in win10 msedge and android google chrome, both worked fine. (my galaxy device does let me drag&drop accross windows, that's the prerequisite, unfortunately, for android browsers to use greenChocolate.)
 
+change log:
+2023 Aug 27:  changed the method in regexp matching so that the script (i.e. the html) can be loaded from local storage (for instance, anywhere in c:) even though it will lose the feature "video removal" the green transparent spot, but at least everything else will work.
+
 how to open up greenChocolate playground:
 1. open up your youtube subscription feed page (or any of the youtube pages that has video thumbnails/links that you want to pick) in browser;
 2. use any method that you know of to open a document out of the youtube webpage and write the javascript for greenChocolate to that new document. for instance, by using this javascript statement `open().document.write()`.
+3. if you don't mind the lacking of the video removal feature (or never bothered to remove video), you may simply save the script to a file and load the file in browser.
 
 operation notes:
 
