@@ -2,7 +2,8 @@
 	function drop(event){
 		event.preventDefault();
 		let payload=event.dataTransfer.getData("text/plain");
-		let ytvid=payload.match(/(?<=\\.youtube\\.com\\/(?:watch\\?v=|shorts\\/))[^"&\\/']+/i);
+		let lms=String.fromCharCode(92);
+		let ytvid=eval("payload.match(/(?<="+lms+".youtube"+lms+".com"+lms+"/(?:watch"+lms+"?v=|shorts"+lms+"/))[^&"+lms+"/]+/i)");
 		if (ytvid!==null){
 			let desc=document.createElement("span");
 			desc.style="font-size:20";
