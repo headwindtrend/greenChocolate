@@ -8,6 +8,7 @@
 			let desc=document.createElement("span");
 			desc.style="font-size:20";
 			desc.innerText=payload;
+			desc.setAttribute("oncontextmenu","this.previousElementSibling.remove();this.parentNode.removeChild(this);return false");
 			let ifrm=document.createElement("iframe");
 			ifrm.width="100%";ifrm.height="100%";
 			ifrm.src="https://www.youtube.com/embed/"+ytvid;
