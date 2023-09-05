@@ -13,7 +13,8 @@ greenChocolate's advantages over an ordinary youtube playlist are:
 i've tested it in win10 msedge and android google chrome, both worked fine. (my galaxy device does let me drag&drop accross windows, that's the prerequisite, unfortunately, for android browsers to use greenChocolate.)
 
 change log:
-2023 Aug 27:  changed the method in regexp matching so that the script (i.e. the html) can be loaded from local storage (for instance, anywhere in c:) even though it will lose the feature "video removal" the green transparent spot, but at least everything else will work.
+* 2023 Sep 05&nbsp;&nbsp;&nbsp;&nbsp;added a hidden feature for video removal. now, right click the text (those "white on chocolate" below) can remove the respective video from the webpage. with this hidden feature, even if the green spot is unavailable (as when greenChocolate is loaded from an html file), user still has a way to remove the video. as a drawback of this, if you somehow need to open the context menu of the text (for instance, to copy it), you have to select it and right click on an empty space (for instance, the chocolate area immediately next to the text). because if you right click on the text, this video removal hidden feature will be triggered instead.
+* 2023 Aug 27&nbsp;&nbsp;&nbsp;&nbsp;changed the method in regexp matching so that the script (i.e. the html) can be loaded from local storage (for instance, anywhere in c:) even though it will lose the feature "video removal" the green transparent spot, but at least everything else will work.
 
 how to open up greenChocolate playground:
 1. open up your youtube subscription feed page (or any of the youtube pages that has video thumbnails/links that you want to pick) in browser;
