@@ -13,7 +13,6 @@
 	}
 	function dropsub(ytvid,desctext){
 		const desc=document.createElement("span");
-		desc.style="font-size:20";
 		desc.innerText=desctext;
 		desc.setAttribute("oncontextmenu","const ytvid=getYtvid(this.innerText);this.previousElementSibling.remove();this.parentNode.removeChild(this);autosave=autosave.replace(ytvid+String.fromCharCode(10),'');localStorage.setItem('playground.remaining',autosave);return false");
 		const ifrm=document.createElement("iframe");
@@ -45,6 +44,7 @@
 		});
 		prependToBody(desc);
 		prependToBody(ifrm);
+		document.body.scrollTop=0;
 	}
 	function allowDrop(event){
 		event.preventDefault();
@@ -67,6 +67,9 @@
 			const sdb=document.createElement("svg");
 			document.body.appendChild(sdb);
 			sdb.outerHTML="<svg id='dropbox' style='position:absolute;top:0;left:0;width:100%;height:100%;' ondrop='drop(event)' ondragover='allowDrop(event)' ondragleave='removeDropBox()' onclick='removeDropBox()'><rect style='width:100%;height:100%;fill:mediumseagreen'/></svg>";
+			if (document.body.clientHeight-document.body.scrollTop<parseFloat(window.getComputedStyle(document.body).fontSize)){
+				document.body.scrollTop=0;
+			}
 		}
 	}
 	function removeDropBox(){
@@ -91,7 +94,7 @@
 		return ytvid
 	}
 </script>
-<body style="background:chocolate;color:white">
+<body style="background:chocolate;color:white;font-size:20">
 	<svg id="jumptop" style="position:fixed;top:20;left:10;width:96;height:96" onclick="document.body.scrollTop=0"><circle cx="48" cy="48" r="48" style="fill:chocolate;fill-opacity:.2"/><polygon points="12,66 48,12 84,66" style="fill:mediumseagreen;fill-opacity:.2;stroke:white;stroke-width:3"/><title>Jump to the top</title></svg>
 	<script>
 		window.ondragenter=function(event){createDropBox()};
