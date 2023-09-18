@@ -1,16 +1,16 @@
 # greenChocolate
 Drag a youtube thumbnail/link and drop it into the greenChocolate playground which is a temporary "playlist" of your choices.
 
-if you got tens or even hundreds of videos flood into your youtube subscription feed everyday, you probably want to prioritize them a bit so that your limited free time can be spent on those favorites of higher priority (important, longing for, eyecatching, interesting, and whatever else it might be.) greenChocolate is the playground to hold the choices you picked from your subscription feed (or whereever it may be, as far as the thumbnail/link you are about to drag&drop is a youtube video.)
+if you got tens or even hundreds of videos flood into your youtube subscription feed everyday, you probably want to prioritize them a bit so that your limited free time can be spent on those favorites of higher priority (important, longing for, eye-catching, interesting, and whatever else it might be.) greenChocolate is the playground to hold the choices you picked from your subscription feed (or wherever it may be, as far as the thumbnail/link you are about to drag&drop is a youtube video.)
 
 greenChocolate's advantages over an ordinary youtube playlist are:
 1. the videos will not start playing automatically one by one (yes, this is indeed an advantage sometimes, if not most of the time);
 2. since the videos will not be played one by one automatically, the order doesn't really matter. scroll through the list and just play them in whatever order you like, hence less burden in the picking process nor need to reorder them on the playlist before you can start playing;
-3. as soon as you drop the payload, the video is loaded in an embeded form (and it is much faster than loading the whole youtube video page);
-4. by the time you finished your picking, all the choosen videos are ready to play, no wasting time in page-loading of each and every video;
+3. as soon as you drop the payload, the video is loaded in an embedded form (and it is much faster than loading the whole youtube video page);
+4. by the time you finished your picking, all the chosen videos are ready to play, no wasting time in page-loading of each and every video;
 5. every video is maximized which utilizes full size of your window.
 
-i've tested it in win10 msedge and android google chrome, both worked fine. (my galaxy device does let me drag&drop accross windows, that's the prerequisite, unfortunately, for android browsers to use greenChocolate.)
+i've tested it in win10 msedge and android google chrome, both worked fine. (my galaxy device does let me drag&drop across windows, that's the prerequisite, unfortunately, for android browsers to use greenChocolate.)
 
 change log:
 * 2023 Sep 16&nbsp;&nbsp;&nbsp;&nbsp;added two behaviors: (1) after a drag event has caused the appearance of the green board, the script will see if at least a part of the green board is visible in the viewport. and in case of "none of it is visible", the viewport will be scrolled to the top (to show the green board) automatically. and (2) after a video is inserted due to a drop event, the viewport will be scrolled to the top (to show the newly added video) automatically.
@@ -30,10 +30,52 @@ greenChocolate has a background in chocolate, and upon your drag operation point
 
 if your drag operation pointer hit destination but the green board doesn't appear, just move it away your window and move it back in. if you did it a number of times and still hasn't able to trigger the green board to appear, try slow down your movement because sometimes the operating system may miss the event if you move too fast. still not make it? the last resort is, just move it on top of the chocolate edges which works all the times. the edges are relatively thin and not ideal for the operation though. another way is, scroll down a bit until the text on chocolate background is shown, redo the drag&drop, and move your pointer on top of anywhere with chocolate background that the green board will certainly appear (at least i have never experienced a fail so far), this is easier than catching the edges. having mention all these troublesome techniques, but they are really seldom needed.
 
+avoid to drag across the handle (the three dots) of the windows splitter in android. because i found it "prevented" the event listener from noticing the `dragenter` event that did happen.
+
+how to put a recommended video onto greenChocolate:
+
+first of all, i found that this requires different techniques for different platforms (i only have the relevant experiences on two platforms that it has ever been tested though.)
+
+for android google chrome, the drag of the recommended video thumbnail will trigger the appearance of the green board. so, it works on its own. and if it doesn't, just drag the payload away the playground and back in. that does the trick to grab the attention of the event listener.
+
+for win10 msedge, the drag of the recommended video thumbnail does not trigger the appearance of the green board at all (don't really know why) even if i drag the payload away and back in. however, there is a way to get it around, that is, to drop it on the address bar and drag it back into the playground thereafter.
+
+when i mentioned the "recommended video" above, it referred to those videos thumbnails that youtube presents you by its algorithm after you played a video on the greenChocolate playground.
+
 here below is the documentation written by bing-ai.
 
 ## Overview
 This script allows users to drag and drop YouTube video links onto a webpage, and it will automatically embed the video into the page. It also provides an option to remove the embedded video.
+
+## Advantages of GreenChocolate Over a Traditional YouTube Playlist
+
+GreenChocolate offers several benefits compared to a standard YouTube playlist:
+
+1. **No Auto-play**: Videos won't automatically play one after another. This can be an advantage when you want more control over what plays next.
+2. **Flexible Order**: Since videos don't auto-play, the order of videos doesn't matter. You can scroll through the list and play videos in any order you like, reducing the need to carefully curate the playlist order.
+3. **Fast Loading**: When you drop a video into the playground, it loads in an embedded form, which is much faster than loading the entire YouTube video page.
+4. **Pre-loaded Videos**: By the time you finish selecting your videos, all chosen videos are ready to play, saving you from waiting for each video to load.
+5. **Maximized Videos**: Each video is maximized to utilize the full size of your window.
+
+## Operating Instructions for GreenChocolate
+
+GreenChocolate is a tool designed for managing videos. Here’s how you can use it:
+
+1. **Drag and Drop:** To add a video to the playground, simply drag it over the chocolate background. When your cursor enters the window over the chocolate, a green board will appear, covering the entire window. You can then release your mouse button to drop the video onto the playground. The video will be added to the top of the list.
+
+2. **Removing Videos:** Each video has a green transparent spot in its top-right corner. Clicking this spot will remove the respective video from the playground. The size of the spot is designed for easy touchscreen operation.
+
+3. **Navigating the Playground:** The green board always appears at the top of the list. If you’ve scrolled down, you can use the “jump to the top” transparent icon to quickly return to the top.
+
+4. **Troubleshooting:** If you’re having trouble triggering the green board to appear, try moving your cursor away from the window and then back in. If this doesn’t work, try slowing down your movement as moving too quickly can sometimes cause the operating system to miss the event.
+
+5. **Adding Recommended Videos:** The process for adding recommended videos (those suggested by YouTube’s algorithm after playing a video) varies between platforms:
+
+   - **Android Google Chrome:** Simply drag the thumbnail of the recommended video onto the playground. If this doesn’t trigger the green board, try dragging it away from and back into the playground.
+
+   - **Windows 10 Microsoft Edge:** Dragging a thumbnail does not trigger the green board. However, you can work around this by dropping it onto the address bar and then dragging it back into the playground.
+
+Please note that dragging across the handle (the three dots) of the windows splitter in Android may prevent the dragenter event from being noticed.
 
 ## Functions
 
