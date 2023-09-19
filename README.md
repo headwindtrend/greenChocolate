@@ -34,11 +34,11 @@ avoid to drag across the handle (the three dots) of the windows splitter in andr
 
 how to put a recommended video onto greenChocolate:
 
-first of all, i found that this requires different techniques for different platforms (i only have the relevant experiences on two platforms that it has ever been tested though.)
+first of all, i found that this requires different techniques for different scenarios.
 
-for android google chrome, the drag of the recommended video thumbnail will trigger the appearance of the green board. so, it works on its own. and if it doesn't, just drag the payload away the playground and back in. that does the trick to grab the attention of the event listener.
+when the green transparent spot is shown, the drag of the recommended video thumbnail will trigger the appearance of the green board. so, it works on its own. and if it doesn't, just drag the payload away the playground and back in. that does the trick to grab the attention of the event listener.
 
-for win10 msedge, the drag of the recommended video thumbnail does not trigger the appearance of the green board at all (don't really know why) even if i drag the payload away and back in. however, there is a way to get it around, that is, to drop it on the address bar and drag it back into the playground thereafter.
+when the green transparent spot is not shown (it happens when the playground was not created out of a youtube webpage), the drag of the recommended video thumbnail does not trigger the appearance of the green board at all even if i drag the payload away and back in. however, there is a way to get it around, that is, to drop it on the address bar and drag it back into the playground thereafter.
 
 when i mentioned the "recommended video" above, it referred to those videos thumbnails that youtube presents you by its algorithm after you played a video on the greenChocolate playground.
 
@@ -69,11 +69,11 @@ GreenChocolate is a tool designed for managing videos. Here’s how you can use 
 
 4. **Troubleshooting:** If you’re having trouble triggering the green board to appear, try moving your cursor away from the window and then back in. If this doesn’t work, try slowing down your movement as moving too quickly can sometimes cause the operating system to miss the event.
 
-5. **Adding Recommended Videos:** The process for adding recommended videos (those suggested by YouTube’s algorithm after playing a video) varies between platforms:
+5. **Adding Recommended Videos:** The process for adding recommended videos (those suggested by YouTube’s algorithm after playing a video) varies between scenarios:
 
-   - **Android Google Chrome:** Simply drag the thumbnail of the recommended video onto the playground. If this doesn’t trigger the green board, try dragging it away from and back into the playground.
+   - **With the green spot:** Simply drag the thumbnail of the recommended video onto the playground. If this doesn’t trigger the green board, try dragging it away from and back into the playground.
 
-   - **Windows 10 Microsoft Edge:** Dragging a thumbnail does not trigger the green board. However, you can work around this by dropping it onto the address bar and then dragging it back into the playground.
+   - **Without the green spot:** Dragging a thumbnail does not trigger the green board. However, you can work around this by dropping it onto the address bar and then dragging it back into the playground.
 
 Please note that dragging across the handle (the three dots) of the windows splitter in Android may prevent the dragenter event from being noticed.
 
