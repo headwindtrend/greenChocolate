@@ -25,6 +25,9 @@ for those things outside of the logging sub-system, please refer to the readme o
 ### how to remove any records on the log?
 - there is a white circle in front of every line (i.e. every record) if it is not marked. otherwise, a black circle if it is marked. whenever there is any lines being marked, the `R` button will appear, click it to get rid of all the marked lines.
 
+### how to backup the records before they are removed?
+- a dialog box will be popped-up to ask for your confirmation everytime you pressed the `R` button. and as soon as the dialog is shown, a copy of the marked records is already put in the clipboard. so, you may paste it somewhere in your storage (for instance, a text file in your local hdd) before you confirm to proceed remove.
+
 ### how to mark/unmark any records on the log?
 - **for one single line**, by highlighting the entire line (including the circle mark), or tripleclicking anywhere on the line (except the video id, because it may trigger the video thumbnail instead.)
 - **for a range of consecutive lines**, by highlighting those targeting lines. as soon as the highlighting operation is completed, all the marks (i.e. the black/white circles) within the highlighted range will be toggled. you may also toggle all by the hotkey `ctrl+a`. for example, let's say you have 5000 lines in the log, and you want to delete all of them except the recent 100 lines. you may `ctrl+a` to highlight all (thus all the lines are marked as a result), and select the last 100 lines to unmark them, and finally click the `R` button to proceed remove.
