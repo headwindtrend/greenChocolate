@@ -16,6 +16,7 @@
 		desc.innerText=desctext;
 		desc.setAttribute("oncontextmenu","const ytvid=getYtvid(this.innerText);this.previousElementSibling.remove();this.parentNode.removeChild(this);autosave=autosave.replace(ytvid+String.fromCharCode(10),'');localStorage.setItem('playground.remaining',autosave);return false");
 		const ifrm=document.createElement("iframe");
+		ifrm.id="yti"+ytvid;
 		ifrm.width="100%";ifrm.height="100%";
 		ifrm.src="https://www.youtube.com/embed/"+ytvid;
 		ifrm.title="YouTube video player";
@@ -38,7 +39,7 @@
 				if (b.innerHTML.match("ytp-button")){
 					const s=d.createElement("svg");
 					b.appendChild(s);
-					s.outerHTML="<svg width='100' height='100' onclick='this.id=&quot;clicked&quot;; parent.window.rmvifrm()' style='position:fixed;top:60;right:0'><circle cx='50' cy='50' r='50' style='fill:mediumseagreen;fill-opacity:.2'/><title>Remove this video from this page</title></svg>";
+					s.outerHTML="<svg width='100' height='100' onclick='parent.window.rmvifrm(&quot;"+ytvid+"&quot;)' style='position:fixed;top:60;right:0'><circle cx='50' cy='50' r='50' style='fill:mediumseagreen;fill-opacity:.2'/><title>Remove this video from this page</title></svg>";
 				}
 			}
 		});
@@ -49,18 +50,14 @@
 	function allowDrop(event){
 		event.preventDefault();
 	}
-	function rmvifrm(){
-		document.querySelectorAll("iframe").forEach(ifrm=>{
-			ifrm.contentWindow.document.querySelectorAll("svg").forEach(isvg=>{
-				if (isvg.id==="clicked"){
-					const ytvid=getYtvid(ifrm.nextElementSibling.innerText);
-					ifrm.nextElementSibling.remove();
-					ifrm.parentNode.removeChild(ifrm);
-					autosave=autosave.replace(ytvid+String.fromCharCode(10),"");
-					localStorage.setItem("playground.remaining",autosave);
-				}
-			})
-		})
+	function rmvifrm(ytvid){
+		const ifrm=document.getElementById("yti"+ytvid);
+		if (ifrm){
+			ifrm.nextElementSibling.remove();
+			ifrm.parentNode.removeChild(ifrm);
+			autosave=autosave.replace(ytvid+String.fromCharCode(10),"");
+			localStorage.setItem("playground.remaining",autosave);
+		}
 	}
 	function createDropBox(){
 		if (document.querySelector("#dropbox")===null){
@@ -81,25 +78,21 @@
 	function prependToBody(element){
 		document.body.insertBefore(element,document.body.firstChild);
 	}
-	function jumpTopIcon(){
-		if (document.body.scrollTop>20){
-			document.querySelector("#jumptop").style.display="block";
-		}else{
-			document.querySelector("#jumptop").style.display="none";
-		}
+	function jumptop(){
+		jumpTopIcon.style.display=(document.body.scrollTop>20?"block":"none");
 	}
 	function getYtvid(payload){
 		const lm=String.fromCharCode(92);
-		const ytvid=eval("payload.match(/(?<="+lm+".youtube"+lm+".com"+lm+"/(?:watch"+lm+"?v=|shorts"+lm+"/))[^&"+lm+"/]+/i)");
+		const ytvid=eval("payload.match(/(?<="+lm+".youtube"+lm+".com"+lm+"/(?:watch"+lm+"?v=|shorts"+lm+"/))["+lm+"w"+lm+"-]+/i)");
 		return ytvid
 	}
 </script>
 <body style="background:chocolate;color:white;font-size:20">
-	<svg id="jumptop" style="position:fixed;top:20;left:10;width:96;height:96" onclick="document.body.scrollTop=0"><circle cx="48" cy="48" r="48" style="fill:chocolate;fill-opacity:.2"/><polygon points="12,66 48,12 84,66" style="fill:mediumseagreen;fill-opacity:.2;stroke:white;stroke-width:3"/><title>Jump to the top</title></svg>
+	<svg id="jumpTopIcon" style="position:fixed;top:20;left:10;width:96;height:96" onclick="document.body.scrollTop=0"><circle cx="48" cy="48" r="48" style="fill:chocolate;fill-opacity:.2"/><polygon points="12,66 48,12 84,66" style="fill:mediumseagreen;fill-opacity:.2;stroke:white;stroke-width:3"/><title>Jump to the top</title></svg>
 	<script>
 		window.ondragenter=function(event){createDropBox()};
-		window.onscroll=function(){jumpTopIcon()};
-		jumpTopIcon();
+		window.onscroll=function(){jumptop()};
+		jumptop();
 		var autosave="";
 		if (localStorage.getItem("playground.remaining")){
 			if (confirm('There is remaining in "autosave" from last session, bring it back now? (if not bringing it back in time, next autosave will overwrite it.)')){
