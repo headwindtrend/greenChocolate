@@ -22,6 +22,7 @@
 		frpr.setAttribute("onclick","updateStorage('"+ytvid+"','Play');alert('A play is logged');");
 		desc.insertBefore(frpr,desc.firstChild);
 		const ifrm=document.createElement("iframe");
+		ifrm.id="yti"+ytvid;
 		ifrm.width="100%";ifrm.height="100%";
 		ifrm.src="https://www.youtube.com/embed/"+ytvid;
 		ifrm.title="YouTube video player";
@@ -44,7 +45,7 @@
 				if (b.innerHTML.match("ytp-button")){
 					const s=d.createElement("svg");
 					b.appendChild(s);
-					s.outerHTML="<svg width='100' height='100' onclick='this.id=&quot;clicked&quot;; parent.window.rmvifrm()' oncontextmenu='this.id=&quot;played&quot;;parent.window.logplay();return false' style='position:fixed;top:60;right:0'><circle cx='50' cy='50' r='50' style='fill:mediumseagreen;fill-opacity:.2'/><title>Remove this video from this page</title></svg>";
+					s.outerHTML="<svg width='100' height='100' onclick='parent.window.rmvifrm(&quot;"+ytvid+"&quot;)' oncontextmenu='parent.window.logplay(&quot;"+ytvid+"&quot;);return false' style='position:fixed;top:60;right:0'><circle cx='50' cy='50' r='50' style='fill:mediumseagreen;fill-opacity:.2'/><title>Remove this video from this page</title></svg>";
 				}
 			}
 		});
@@ -55,19 +56,15 @@
 	function allowDrop(event){
 		event.preventDefault();
 	}
-	function rmvifrm(){
-		document.querySelectorAll("iframe").forEach(ifrm=>{
-			ifrm.contentWindow.document.querySelectorAll("svg").forEach(isvg=>{
-				if (isvg.id==="clicked"){
-					const ytvid=getYtvid(ifrm.nextElementSibling.innerText);
-					ifrm.nextElementSibling.remove();
-					ifrm.parentNode.removeChild(ifrm);
-					autosave=autosave.replace(ytvid+String.fromCharCode(10),"");
-					localStorage.setItem("playground.remaining",autosave);
-					updateStorage(ytvid,"Remove");
-				}
-			})
-		})
+	function rmvifrm(ytvid){
+		const ifrm=document.getElementById("yti"+ytvid);
+		if (ifrm){
+			ifrm.nextElementSibling.remove();
+			ifrm.parentNode.removeChild(ifrm);
+			autosave=autosave.replace(ytvid+String.fromCharCode(10),"");
+			localStorage.setItem("playground.remaining",autosave);
+			updateStorage(ytvid,"Remove");
+		}
 	}
 	function createDropBox(){
 		if (document.querySelector("#dropbox")===null){
@@ -88,15 +85,11 @@
 	function prependToBody(element){
 		document.body.insertBefore(element,document.body.firstChild);
 	}
-	function jumpTopIcon(){
-		if (document.body.scrollTop>20){
-			document.querySelector("#jumptop").style.display="block";
-		}else{
-			document.querySelector("#jumptop").style.display="none";
-		}
+	function jumptop(){
+		jumpTopIcon.style.display=(document.body.scrollTop>20?"block":"none");
 	}
 	function timestamp(ts=Date.now()){
-		const s=Date(ts).toString();
+		const s=new Date(ts).toString();
 		const part1=s.slice(4).match(/(?:.*? ){2}/);
 		const part2=s.slice(4+part1.toString().length).match(/.*? /);
 		const part3=s.slice(4+part1.toString().length+part2.toString().length).match(/.*?(?= )/);
@@ -115,22 +108,19 @@
 	}
 	function getYtvid(payload){
 		const lm=String.fromCharCode(92);
-		const ytvid=eval("payload.match(/(?<="+lm+".youtube"+lm+".com"+lm+"/(?:watch"+lm+"?v=|shorts"+lm+"/))[^&"+lm+"/]+/i)");
+		const ytvid=eval("payload.match(/(?<="+lm+".youtube"+lm+".com"+lm+"/(?:watch"+lm+"?v=|shorts"+lm+"/))["+lm+"w"+lm+"-]+/i)");
 		return ytvid
 	}
-	function logplay(){
-		document.querySelectorAll("iframe").forEach(ifrm=>{
-			ifrm.contentWindow.document.querySelectorAll("svg").forEach(isvg=>{
-				if (isvg.id==="played"){
-					isvg.removeAttribute("id");
-					const ytvid=getYtvid(ifrm.nextElementSibling.innerText);
-					updateStorage(ytvid,"Play");
-					ifrm.contentWindow.document.querySelector(".ytp-cued-thumbnail-overlay").dispatchEvent(new MouseEvent("click",{view:window,bubbles:true,cancelable:true,clientX:200,clientY:200,button:0}));
-					itlog[ytvid]=ifrm.contentWindow.document.querySelector(".ytp-title-expanded-title").innerText+String.fromCharCode(10)+ifrm.contentWindow.document.querySelector(".ytp-title-text").innerText+String.fromCharCode(10)+"Length "+ifrm.contentWindow.document.querySelector(".ytp-time-duration").innerText;
-					localStorage.setItem("playground.itlog",JSON.stringify(itlog));
-				}
-			})
-		})
+	function logplay(ytvid){
+		const ifrm=document.getElementById("yti"+ytvid);
+		if (ifrm){
+			updateStorage(ytvid,"Play");
+			const d=ifrm.contentWindow.document;
+			const nl=String.fromCharCode(10);
+			d.querySelector(".ytp-cued-thumbnail-overlay").dispatchEvent(new MouseEvent("click",{view:window,bubbles:true,cancelable:true,clientX:200,clientY:200,button:0}));
+			itlog[ytvid]=d.querySelector(".ytp-title-expanded-title").innerText+nl+d.querySelector(".ytp-title-text").innerText+nl+"Length "+d.querySelector(".ytp-time-duration").innerText;
+			localStorage.setItem("playground.itlog",JSON.stringify(itlog));
+		}
 	}
 	function showTxLog(){
 		if (ondblclickDisabled){ondblclickDisabled=false;return}
@@ -143,7 +133,7 @@
 			setTimeout(()=>{if (tbi.scrollTop===0||atbott) tbi.scrollTop=tbi.scrollHeight},100);
 			tb.querySelector("div:last-child").innerText="Total: "+(tbi.innerText.match(/^(?!$)/mg)||[]).length+" Lines"+" ".repeat(9)+"Marked: 0 Lines";
 		},100);
-		document.querySelector("#rButt").style.display="none";
+		rButt.style.display="none";
 		tb.style.display="block";
 	}
 	function sel_anchNode(){
@@ -152,27 +142,20 @@
 		if (sn.nodeType===Node.ELEMENT_NODE){return sn}
 		return null
 	}
-	function sel_anchNode_tagName(){
-		return (sel_anchNode()?sel_anchNode().tagName:"")
-	}
 	function toggleLineMarks(s=getSelection().toString(),t=sel_anchNode()){
 		if (t){
 			t.innerText=t.innerText.replace(s,s.replace(/[⚪⚫]/g,(m)=>{return m==="⚪"?"⚫":"⚪"}));
 			const marks=t.innerText.match(/⚫/g);
 			t.nextElementSibling.innerText=t.nextElementSibling.innerText.replace(RegExp("(?<=Marked: )[0-9]+"),(marks||[]).length);
-			if (t.innerText.match(/⚫/)){
-				document.querySelector("#rButt").style.display="block";
-			}else{
-				document.querySelector("#rButt").style.display="none";
-			}
+			rButt.style.display=(t.innerText.match(/⚫/)?"block":"none");
 		}
 	}
 	function check_lines_sel(){
 		const tbi=document.querySelector("#textBox div");
 		const matches=tbi.innerText.match(/⚫/g);
-		if (matches){if (matches.length>1){
+		if ((matches||[]).length>1){
 			return confirm("Some lines are marked, ignore them and proceed to close the pop-up? (all marks will be reset to unmarked if proceed.)")
-		}}return true
+		}return true
 	}
 	function remove_marked_lines(){
 		const lm=String.fromCharCode(92);
@@ -197,37 +180,33 @@
 				tbi.innerText=eval("tbi.innerText.replace(/^.*?⚫.+?("+lm+"n|$)/mg,'')");
 				txlog=tbi.innerText.replace(/⚪ /g,"");
 				localStorage.setItem("playground.txlog",txlog);
-				document.querySelector("#rButt").style.display="none";
+				rButt.style.display="none";
 				tbi.nextElementSibling.innerText="Total: "+(tbi.innerText.match(/^(?!$)/mg)||[]).length+" Lines"+" ".repeat(9)+"Marked: 0 Lines";
 			}},1000);
 		}
 	}
-	function jumpBottomButton(target,theButton){
-		if (Math.abs(target.scrollTop+target.clientHeight-target.scrollHeight)<parseFloat(window.getComputedStyle(target).fontSize)*0.5){
-			theButton.style.display="none";
-		}else{
-			theButton.style.display="block";
-		}
+	function jumpBottom(target,theButton){
+		theButton.style.display=(Math.abs(target.scrollTop+target.clientHeight-target.scrollHeight)<parseFloat(window.getComputedStyle(target).fontSize)*0.5?"none":"block");
 	}
 </script>
 <body ondblclick="showTxLog();" style="background:chocolate;color:white;font-size:20">
-	<div id="textBox" style="display:none;width:800;border:3px solid black;padding:10;background-color:lightgray;color:black;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%)" ondblclick="">
+	<div id="textBox" style="display:none;width:800;border:3px solid black;padding:10;background-color:lightgray;color:black;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%)" ondblclick="event.stopPropagation();">
 		<button onclick="if (check_lines_sel()){this.parentNode.style.display='none'}" style="position:absolute;top:5;right:30;background-color:red;font-size:30;">&#215;</button>
 		<button id="rButt" onclick="remove_marked_lines()" style="display:none;position:absolute;top:50%;right:30;transform:translateY(-50%);background-color:red;color:lightgray;font-size:30;font-weight:bold;">R</button>
-		<button id="jumpbott" onclick="this.parentNode.querySelector('div').scrollTop=this.parentNode.querySelector('div').scrollHeight" style="display:none;position:absolute;bottom:43;right:30;background-color:mediumseagreen;color:white;font-size:30;font-weight:bold;">⚺</button>
+		<button id="jumpBottomButton" onclick="this.parentNode.querySelector('div').scrollTop=this.parentNode.querySelector('div').scrollHeight" style="display:none;position:absolute;bottom:43;right:30;background-color:mediumseagreen;color:white;font-size:30;font-weight:bold;">⚺</button>
 		<div style="overflow:auto;height:500;white-space:pre;max-height:var(document.body.clientHeight-70);"></div>
 		<div style="margin-top:10;background:black;color:white;text-align:center;font-weight:bold;padding-bottom:5;white-space:pre;"></div>
 	</div>
 	<div id="imageBox" style="display:none;flex-flow:column;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:mediumseagreen;padding:5;max-height:var(document.body.clientHeight-10);">
 		<a onclick="return false"><img></a>
 		<div style="overflow:auto;background:chocolate;color:white;text-align:right;padding:5"></div>
-		<button id="selectByYtvid" onclick="const tbi=document.querySelector('#textBox div');const ytvid=getYtvid(this.parentNode.querySelector('a').href);tbi.innerText=(this.innerText==='Sel'?tbi.innerText.replace(RegExp('⚪(.+?'+ytvid+')$','mg'),'⚫$1'):tbi.innerText.replace(RegExp('⚫(.+?'+ytvid+')$','mg'),'⚪$1'));const marks=tbi.innerText.match(/⚫/g);tbi.nextElementSibling.innerText=tbi.nextElementSibling.innerText.replace(RegExp('(?<=Marked: )[0-9]+'),(marks||[]).length);document.querySelector('#rButt').style.display=(tbi.innerText.match(/⚫/)?'block':'none');this.parentNode.style.display='none'" style="position:absolute;bottom:5;left:5;background-color:lightgray;color:black;font-size:20;font-weight:bold;">Sel</button>
+		<button id="selectByYtvid" onclick="const tbi=document.querySelector('#textBox div');const ytvid=getYtvid(this.parentNode.querySelector('a').href);tbi.innerText=(this.innerText==='Sel'?tbi.innerText.replace(RegExp('⚪(.+?'+ytvid+')$','mg'),'⚫$1'):tbi.innerText.replace(RegExp('⚫(.+?'+ytvid+')$','mg'),'⚪$1'));const marks=tbi.innerText.match(/⚫/g);tbi.nextElementSibling.innerText=tbi.nextElementSibling.innerText.replace(RegExp('(?<=Marked: )[0-9]+'),(marks||[]).length);rButt.style.display=(tbi.innerText.match(/⚫/)?'block':'none');this.parentNode.style.display='none'" style="position:absolute;bottom:5;left:5;background-color:lightgray;color:black;font-size:20;font-weight:bold;">Sel</button>
 	</div>
-	<svg id="jumptop" style="position:fixed;top:20;left:10;width:96;height:96" onclick="document.body.scrollTop=0"><circle cx="48" cy="48" r="48" style="fill:chocolate;fill-opacity:.2"/><polygon points="12,66 48,12 84,66" style="fill:mediumseagreen;fill-opacity:.2;stroke:white;stroke-width:3"/><title>Jump to the top</title></svg>
+	<svg id="jumpTopIcon" style="position:fixed;top:20;left:10;width:96;height:96" onclick="document.body.scrollTop=0"><circle cx="48" cy="48" r="48" style="fill:chocolate;fill-opacity:.2"/><polygon points="12,66 48,12 84,66" style="fill:mediumseagreen;fill-opacity:.2;stroke:white;stroke-width:3"/><title>Jump to the top</title></svg>
 	<script>
 		window.ondragenter=function(event){createDropBox()};
-		window.onscroll=function(){jumpTopIcon()};
-		jumpTopIcon();
+		window.onscroll=function(){jumptop()};
+		jumptop();
 		var autosave="";
 		if (localStorage.getItem("playground.remaining")){
 			if (confirm('There is remaining in "autosave" from last session, bring it back now? (if not bringing it back in time, next autosave will overwrite it.)')){
@@ -238,22 +217,22 @@
 		var txlog=(localStorage.getItem("playground.txlog")||"");
 		var vilog=JSON.parse(localStorage.getItem("playground.vilog")||"{}");
 		var itlog=JSON.parse(localStorage.getItem("playground.itlog")||"{}");
-		document.querySelector("#textBox div").onscroll=function(){jumpBottomButton(this,document.querySelector("#jumpbott"))};
-		window.onkeyup=function(e){if (e.key===";"&&e.ctrlKey){showTxLog()}else if (e.key==="a"&&e.ctrlKey){if (document.querySelector("#textBox").style.display!=="none"){const tbi=document.querySelector("#textBox div");toggleLineMarks(tbi.innerText,tbi)}}};
+		document.querySelector("#textBox div").onscroll=function(){jumpBottom(this,document.querySelector("#jumpBottomButton"))};
+		window.onkeyup=function(e){if (e.key===";"&&e.ctrlKey){showTxLog()}else if (e.key==="a"&&e.ctrlKey){if (textBox.style.display!=="none"){const tbi=document.querySelector("#textBox div");toggleLineMarks(tbi.innerText,tbi)}}};
 		var ondblclickDisabled=false;
 		document.addEventListener("mouseup",(event)=>{
-			if (getSelection().toString()&&document.querySelector("#imageBox").contains(sel_anchNode())){return}
-			if (event.target.tagName==="DIV"&&sel_anchNode_tagName()==="DIV"&&document.querySelector("#textBox").contains(event.target)){
-				const selection=getSelection().toString();
-				if (selection.length>0){
+			if (getSelection().toString()&&imageBox.contains(sel_anchNode())){return}
+			const selection=getSelection().toString();
+			if (selection.length>0){
+				if (textBox.contains(sel_anchNode())&&textBox.contains(event.target)){
 					ondblclickDisabled=true;setTimeout(()=>{ondblclickDisabled=false},100);
 					if (vilog.hasOwnProperty(selection.trim())){
-						setTimeout(()=>{const selt=selection.trim();const ib=document.querySelector("#imageBox");ib.querySelector("a img").src="https://img.youtube.com/vi/"+selt+"/hqdefault.jpg";ib.querySelector("a").href="https://www.youtube.com/watch?v="+selt;ib.querySelector("div").innerText="https://www.youtube.com/watch?v="+selt+String.fromCharCode(10)+(itlog[selt]===undefined?"":itlog[selt]+String.fromCharCode(10))+vilog[selt].replace(/, /g,String.fromCharCode(10));ib.querySelector("#selectByYtvid").innerText=(document.querySelector("#textBox div").innerText.match(RegExp("⚪.+?"+selt+"$","m"))?"Sel":"unSel");ib.style.display="inline-flex"},150)
+						setTimeout(()=>{const nl=String.fromCharCode(10);const selt=selection.trim();const ib=document.querySelector("#imageBox");ib.querySelector("a img").src="https://img.youtube.com/vi/"+selt+"/hqdefault.jpg";ib.querySelector("a").href="https://www.youtube.com/watch?v="+selt;ib.querySelector("div").innerText="https://www.youtube.com/watch?v="+selt+nl+(itlog[selt]===undefined?"":itlog[selt]+nl)+vilog[selt].replace(/, /g,nl);selectByYtvid.innerText=(document.querySelector("#textBox div").innerText.match(RegExp("⚪.+?"+selt+"$","m"))?"Sel":"unSel");ib.style.display="block"},150)
 					}else if (selection.length>30){
 						setTimeout(()=>{toggleLineMarks()},150)
 					}
-				}else{document.querySelector("#imageBox").style.display="none";}
-			}else{document.querySelector("#imageBox").style.display="none";}
+				}else{imageBox.style.display="none";}
+			}else{imageBox.style.display="none";}
 		});
 	</script>
 </body>
