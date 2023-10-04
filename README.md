@@ -13,6 +13,7 @@ greenChocolate's advantages over an ordinary youtube playlist are:
 i've tested it in win10 msedge and android google chrome, both worked fine. (my galaxy device does let me drag&drop across windows, that's the prerequisite, unfortunately, for android browsers to use greenChocolate.)
 
 change log:
+* 2023 Oct 04&nbsp;&nbsp;&nbsp;&nbsp;changed quite some codes yet everything still works the same (to users). just wanted to make it a bit better (in my point of view as the coder) internally.
 * 2023 Sep 23&nbsp;&nbsp;&nbsp;&nbsp;a new branch `With the logging sub-system` is created out of `main`.
 * 2023 Sep 16&nbsp;&nbsp;&nbsp;&nbsp;added two behaviors: (1) after a drag event has caused the appearance of the green board, the script will see if at least a part of the green board is visible in the viewport. and in case of "none of it is visible", the viewport will be scrolled to the top (to show the green board) automatically. and (2) after a video is inserted due to a drop event, the viewport will be scrolled to the top (to show the newly added video) automatically.
 * 2023 Sep 14&nbsp;&nbsp;&nbsp;&nbsp;added a logo for greenChocolate.
