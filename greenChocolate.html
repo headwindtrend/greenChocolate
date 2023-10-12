@@ -15,7 +15,9 @@
 	function dropsub(ytvid,desctext){
 		const desc=document.createElement("span");
 		desc.innerText=desctext;
-		desc.setAttribute("oncontextmenu","const ytvid=getYtvid(this.innerText);this.previousElementSibling.remove();this.parentNode.removeChild(this);autosave=autosave.replace(ytvid+String.fromCharCode(10),'');localStorage.setItem('playground.remaining',autosave);updateStorage(ytvid,'Remove');return false");
+		desc.setAttribute("oncontextmenu","rmvifrm('"+ytvid+"');return false");
+		desc.setAttribute("onmouseenter","const rmv=document.createElement('button');this.appendChild(rmv);rmv.outerHTML='<button id=rmvButton onclick=rmvifrm(&apos;"+ytvid+"&apos;); style=cursor:pointer;background-color:mediumseagreen;color:red;font-size:20;font-weight:bold;>Remove</button>';");
+		desc.setAttribute("onmouseleave","const rmv=document.getElementById('rmvButton');if (rmv) rmv.remove();");
 		const frpr=document.createElement("span");
 		frpr.innerText="👆";
 		frpr.style="cursor:pointer;";
@@ -45,7 +47,10 @@
 				if (b.innerHTML.match("ytp-button")){
 					const s=d.createElement("svg");
 					b.appendChild(s);
-					s.outerHTML="<svg width='100' height='100' onclick='parent.window.rmvifrm(&quot;"+ytvid+"&quot;)' oncontextmenu='parent.window.logplay(&quot;"+ytvid+"&quot;);return false' style='position:fixed;top:60;right:0'><circle cx='50' cy='50' r='50' style='fill:mediumseagreen;fill-opacity:.2'/><title>Remove this video from this page</title></svg>";
+					s.outerHTML="<svg width='100' height='100' onmouseenter='svgYtp.style.display=(svgYtp.style.display===&quot;none&quot;?&quot;block&quot;:&quot;none&quot;);this.querySelector(&quot;circle&quot;).style.fillOpacity=1;' onmouseleave='this.querySelector(&quot;circle&quot;).style.fillOpacity=.2;' onclick='parent.window.rmvifrm(&quot;"+ytvid+"&quot;)' oncontextmenu='parent.window.logplay(&quot;"+ytvid+"&quot;);return false' style='position:fixed;top:60;right:0'><circle cx='50' cy='50' r='50' style='fill:mediumseagreen;fill-opacity:.2'/><title>Remove this video from this page</title></svg>";
+					const ytp=d.createElement("svg");
+					b.appendChild(ytp);
+					ytp.outerHTML="<svg id='svgYtp' width='120' height='80' onmouseenter='this.querySelector(&quot;rect&quot;).style.fillOpacity=1;this.querySelector(&quot;polygon&quot;).style.fillOpacity=1;' onmouseleave='this.querySelector(&quot;rect&quot;).style.fillOpacity=.2;this.querySelector(&quot;polygon&quot;).style.fillOpacity=.2;' onclick='parent.window.logplay(&quot;"+ytvid+"&quot;);' style='display:none;position:fixed;top:70;right:110'><rect width='120' height='80' rx='15' ry='15' style='fill:red;fill-opacity:.2'/><polygon points='50,20 85,40 50,60' style='fill:white;fill-opacity:.2'/><title>Play this video</title></svg>";
 				}
 			}
 		});
@@ -137,10 +142,12 @@
 		tb.style.display="block";
 	}
 	function sel_anchNode(){
-		const sn=getSelection().anchorNode;
-		if (sn.nodeType===Node.TEXT_NODE){return sn.parentNode}
-		if (sn.nodeType===Node.ELEMENT_NODE){return sn}
-		return null
+		const selection=getSelection();
+		if (selection&&selection.anchorNode){
+			const sn=selection.anchorNode;
+			if (sn.nodeType===Node.TEXT_NODE){return sn.parentNode}
+			if (sn.nodeType===Node.ELEMENT_NODE){return sn}
+		}return null
 	}
 	function toggleLineMarks(s=getSelection().toString(),t=sel_anchNode()){
 		if (t){
@@ -202,7 +209,7 @@
 		<div style="overflow:auto;background:chocolate;color:white;text-align:right;padding:5"></div>
 		<button id="selectByYtvid" onclick="const tbi=document.querySelector('#textBox div');const ytvid=getYtvid(this.parentNode.querySelector('a').href);tbi.innerText=(this.innerText==='Sel'?tbi.innerText.replace(RegExp('⚪(.+?'+ytvid+')$','mg'),'⚫$1'):tbi.innerText.replace(RegExp('⚫(.+?'+ytvid+')$','mg'),'⚪$1'));const marks=tbi.innerText.match(/⚫/g);tbi.nextElementSibling.innerText=tbi.nextElementSibling.innerText.replace(RegExp('(?<=Marked: )[0-9]+'),(marks||[]).length);rButt.style.display=(tbi.innerText.match(/⚫/)?'block':'none');this.parentNode.style.display='none'" style="position:absolute;bottom:5;left:5;background-color:lightgray;color:black;font-size:20;font-weight:bold;">Sel</button>
 	</div>
-	<svg id="jumpTopIcon" style="position:fixed;top:20;left:10;width:96;height:96" onclick="document.body.scrollTop=0"><circle cx="48" cy="48" r="48" style="fill:chocolate;fill-opacity:.2"/><polygon points="12,66 48,12 84,66" style="fill:mediumseagreen;fill-opacity:.2;stroke:white;stroke-width:3"/><title>Jump to the top</title></svg>
+	<svg id="jumpTopIcon" onmouseenter="this.querySelector('circle').style.fillOpacity=1;this.querySelector('polygon').style.fillOpacity=1;" onmouseleave="this.querySelector('circle').style.fillOpacity=.2;this.querySelector('polygon').style.fillOpacity=.2;" style="position:fixed;top:20;left:10;width:96;height:96" onclick="document.body.scrollTop=0"><circle cx="48" cy="48" r="48" style="fill:chocolate;fill-opacity:.2"/><polygon points="12,66 48,12 84,66" style="fill:mediumseagreen;fill-opacity:.2;stroke:white;stroke-width:3"/><title>Jump to the top</title></svg>
 	<script>
 		window.ondragenter=function(event){createDropBox()};
 		window.onscroll=function(){jumptop()};
