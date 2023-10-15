@@ -88,6 +88,32 @@
 		const ytvid=eval("payload.match(/(?<="+lm+".youtube"+lm+".com"+lm+"/(?:watch"+lm+"?v=|shorts"+lm+"/))["+lm+"w"+lm+"-]+/i)");
 		return ytvid
 	}
+	function importYtvids(){
+		if (document.getElementById("ytvidsImport")) return;
+		const lm=String.fromCharCode(92);
+		const ta=document.createElement("textarea");
+		document.body.appendChild(ta);
+		ta.outerHTML="<textarea id='ytvidsImport' placeholder='Paste the id list (of youtube videos) here to import' onpaste='event.stopPropagation();event.preventDefault();let tookplace=false;const payload=(event.clipboardData||window.clipboardData).getData(&quot;Text&quot;).replace(/"+lm+"r/g,&quot;&quot;);payload.split(String.fromCharCode(10)).forEach(ytvid=>{if (ytvid&&!autosave.match(ytvid)&&ytvid.match(/^["+lm+"w"+lm+"-]{11}$/)){dropsub(ytvid,&quot;https://www.youtube.com/watch?v=&quot;+ytvid);tookplace=true;}});if (tookplace){autosave+=payload;localStorage.setItem(&quot;playground.remaining&quot;,autosave);this.value=payload+&quot;"+lm+"n{done}&quot;}else{this.value=payload+&quot;"+lm+"n{nothing valid}&quot;}' onfocusout='this.remove()' style='width:200;height:200;max-height=var(document.body.clientHeight-20);position:fixed;top:50%;left:50%;transform:translate(-50%,-50%)'></textarea>";
+		ytvidsImport.focus();
+	}
+	function exportYtvids(){
+		if (document.getElementById("ytvidsExport")) return;
+		const theList=getPlaygroundYtvids();
+		navigator.clipboard.writeText(theList).then(()=>{},()=>{alert("Oops...")});
+		const ta=document.createElement("textarea");
+		document.body.appendChild(ta);
+		ta.outerHTML="<textarea id='ytvidsExport' onfocusout='this.remove()' style='width:200;height:200;max-height=var(document.body.clientHeight-20);position:fixed;top:50%;left:50%;transform:translate(-50%,-50%)'>"+theList+String.fromCharCode(10)+"{Already in clipboard}</textarea>";
+		ytvidsExport.focus();
+	}
+	function getPlaygroundYtvids(){
+		const lm=String.fromCharCode(92),nl=String.fromCharCode(10);
+		let theList=eval("removeDupLines(document.body.innerHTML.replace(/(?<="+lm+".youtube"+lm+".com"+lm+"/(?:watch"+lm+"?v=|shorts"+lm+"/))["+lm+"w"+lm+"-]+/ig,'"+lm+"nytvid=$&"+lm+"n').replace(/^(?!ytvid=).*("+lm+"n|$)/mg,'').replace(/^ytvid=/mg,''))").split(nl).filter(Boolean).reverse().join(nl);if (theList) theList+=nl;
+		return theList
+	}
+	function removeDupLines(theText){
+		const nl=String.fromCharCode(10);
+		return [...new Set(theText.split(nl))].join(nl)
+	}
 </script>
 <body style="background:chocolate;color:white;font-size:20">
 	<svg id="jumpTopIcon" onmouseenter="this.querySelector('circle').style.fillOpacity=1;this.querySelector('polygon').style.fillOpacity=1;" onmouseleave="this.querySelector('circle').style.fillOpacity=.2;this.querySelector('polygon').style.fillOpacity=.2;" style="position:fixed;top:20;left:10;width:96;height:96" onclick="document.body.scrollTop=0"><circle cx="48" cy="48" r="48" style="fill:chocolate;fill-opacity:.2"/><polygon points="12,66 48,12 84,66" style="fill:mediumseagreen;fill-opacity:.2;stroke:white;stroke-width:3"/><title>Jump to the top</title></svg>
@@ -102,5 +128,6 @@
 				autosave.split(String.fromCharCode(10)).forEach(ytvid=>{if (ytvid) dropsub(ytvid,"https://www.youtube.com/watch?v="+ytvid)});
 			}
 		}
+		window.onkeyup=function(e){if (e.key==="Enter"&&e.altKey){importYtvids();}else if (e.key===String.fromCharCode(92)&&e.altKey){exportYtvids();}};
 	</script>
 </body>
