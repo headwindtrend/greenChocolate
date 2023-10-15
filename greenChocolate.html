@@ -195,6 +195,32 @@
 	function jumpBottom(target,theButton){
 		theButton.style.display=(Math.abs(target.scrollTop+target.clientHeight-target.scrollHeight)<parseFloat(window.getComputedStyle(target).fontSize)*0.5?"none":"block");
 	}
+	function importYtvids(){
+		if (document.getElementById("ytvidsImport")) return;
+		const lm=String.fromCharCode(92);
+		const ta=document.createElement("textarea");
+		document.body.appendChild(ta);
+		ta.outerHTML="<textarea id='ytvidsImport' placeholder='Paste the id list (of youtube videos) here to import' onpaste='event.stopPropagation();event.preventDefault();let tookplace=false;const payload=(event.clipboardData||window.clipboardData).getData(&quot;Text&quot;).replace(/"+lm+"r/g,&quot;&quot;);payload.split(String.fromCharCode(10)).forEach(ytvid=>{if (ytvid&&!autosave.match(ytvid)&&ytvid.match(/^["+lm+"w"+lm+"-]{11}$/)){dropsub(ytvid,&quot;https://www.youtube.com/watch?v=&quot;+ytvid);updateStorage(ytvid,&quot;Drop&quot;);tookplace=true;}});if (tookplace){autosave+=payload;autosave=removeDupLines(autosave);localStorage.setItem(&quot;playground.remaining&quot;,autosave);this.value=payload+&quot;"+lm+"n{done}&quot;}else{this.value=payload+&quot;"+lm+"n{nothing valid}&quot;}' onfocusout='this.remove()' style='width:200;height:200;max-height=var(document.body.clientHeight-20);position:fixed;top:50%;left:50%;transform:translate(-50%,-50%)'></textarea>";
+		ytvidsImport.focus();
+	}
+	function exportYtvids(){
+		if (document.getElementById("ytvidsExport")) return;
+		const theList=getPlaygroundYtvids();
+		navigator.clipboard.writeText(theList).then(()=>{},()=>{alert("Oops...")});
+		const ta=document.createElement("textarea");
+		document.body.appendChild(ta);
+		ta.outerHTML="<textarea id='ytvidsExport' onfocusout='this.remove()' style='width:200;height:200;max-height=var(document.body.clientHeight-20);position:fixed;top:50%;left:50%;transform:translate(-50%,-50%)'>"+theList+String.fromCharCode(10)+"{Already in clipboard}</textarea>";
+		ytvidsExport.focus();
+	}
+	function getPlaygroundYtvids(){
+		const lm=String.fromCharCode(92),nl=String.fromCharCode(10);
+		let theList=eval("removeDupLines(document.body.innerHTML.replace(/(?<="+lm+".youtube"+lm+".com"+lm+"/(?:watch"+lm+"?v=|shorts"+lm+"/))["+lm+"w"+lm+"-]+/ig,'"+lm+"nytvid=$&"+lm+"n').replace(/^(?!ytvid=).*("+lm+"n|$)/mg,'').replace(/^ytvid=/mg,''))").split(nl).filter(Boolean).reverse().join(nl);if (theList) theList+=nl;
+		return theList
+	}
+	function removeDupLines(theText){
+		const nl=String.fromCharCode(10);
+		return [...new Set(theText.split(nl))].join(nl)
+	}
 </script>
 <body ondblclick="showTxLog();" style="background:chocolate;color:white;font-size:20">
 	<div id="textBox" style="display:none;width:800;border:3px solid black;padding:10;background-color:lightgray;color:black;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%)" ondblclick="event.stopPropagation();">
@@ -225,7 +251,7 @@
 		var vilog=JSON.parse(localStorage.getItem("playground.vilog")||"{}");
 		var itlog=JSON.parse(localStorage.getItem("playground.itlog")||"{}");
 		document.querySelector("#textBox div").onscroll=function(){jumpBottom(this,document.querySelector("#jumpBottomButton"))};
-		window.onkeyup=function(e){if (e.key===";"&&e.ctrlKey){showTxLog()}else if (e.key==="a"&&e.ctrlKey){if (textBox.style.display!=="none"){const tbi=document.querySelector("#textBox div");toggleLineMarks(tbi.innerText,tbi)}}};
+		window.onkeyup=function(e){if (e.key===";"&&e.ctrlKey){showTxLog()}else if (e.key==="a"&&e.ctrlKey){if (textBox.style.display!=="none"){const tbi=document.querySelector("#textBox div");toggleLineMarks(tbi.innerText,tbi)}}else if (e.key==="Enter"&&e.altKey){importYtvids();}else if (e.key===String.fromCharCode(92)&&e.altKey){exportYtvids();}};
 		var ondblclickDisabled=false;
 		document.addEventListener("mouseup",(event)=>{
 			if (getSelection().toString()&&imageBox.contains(sel_anchNode())){return}
