@@ -157,6 +157,7 @@
 			tb.querySelector("div:last-child").innerText="Total: "+(tbi.innerText.match(/^(?!$)/mg)||[]).length+" Lines"+" ".repeat(9)+"Marked: 0 Lines";
 		},100);
 		rButt.style.display="none";
+		tbi.style.maxHeight=document.body.clientHeight-70;
 		tb.style.display="block";
 	}
 	function sel_anchNode(){
@@ -245,10 +246,10 @@
 		<button onclick="if (check_lines_sel()){this.parentNode.style.display='none'}" style="position:absolute;top:5;right:30;background-color:red;font-size:30;">&#215;</button>
 		<button id="rButt" onclick="remove_marked_lines()" style="display:none;position:absolute;top:50%;right:30;transform:translateY(-50%);background-color:red;color:lightgray;font-size:30;font-weight:bold;">R</button>
 		<button id="jumpBottomButton" onclick="this.parentNode.querySelector('div').scrollTop=this.parentNode.querySelector('div').scrollHeight" style="display:none;position:absolute;bottom:43;right:30;background-color:mediumseagreen;color:white;font-size:30;font-weight:bold;">⚺</button>
-		<div style="overflow:auto;height:500;white-space:pre;max-height:var(document.body.clientHeight-70);"></div>
+		<div style="overflow:auto;height:500;white-space:pre;"></div>
 		<div style="margin-top:10;background:black;color:white;text-align:center;font-weight:bold;padding-bottom:5;white-space:pre;"></div>
 	</div>
-	<div id="imageBox" style="display:none;flex-flow:column;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:mediumseagreen;padding:5;max-height:var(document.body.clientHeight-10);">
+	<div id="imageBox" style="display:none;flex-flow:column;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:mediumseagreen;padding:5;overflow:auto;">
 		<a onclick="return false"><img></a>
 		<div style="overflow:auto;background:chocolate;color:white;text-align:right;padding:5"></div>
 		<button id="selectByYtvid" onclick="const tbi=document.querySelector('#textBox div');const ytvid=getYtvid(this.parentNode.querySelector('a').href);tbi.innerText=(this.innerText==='Sel'?tbi.innerText.replace(RegExp('⚪(.+?'+ytvid+')$','mg'),'⚫$1'):tbi.innerText.replace(RegExp('⚫(.+?'+ytvid+')$','mg'),'⚪$1'));const marks=tbi.innerText.match(/⚫/g);tbi.nextElementSibling.innerText=tbi.nextElementSibling.innerText.replace(RegExp('(?<=Marked: )[0-9]+'),(marks||[]).length);rButt.style.display=(tbi.innerText.match(/⚫/)?'block':'none');this.parentNode.style.display='none'" style="position:absolute;bottom:5;left:5;background-color:lightgray;color:black;font-size:20;font-weight:bold;">Sel</button>
@@ -278,7 +279,7 @@
 				if (textBox.contains(sel_anchNode())&&textBox.contains(event.target)){
 					ondblclickDisabled=true;setTimeout(()=>{ondblclickDisabled=false},100);
 					if (vilog.hasOwnProperty(selection.trim())){
-						setTimeout(()=>{const nl=String.fromCharCode(10);const selt=selection.trim();const ib=document.querySelector("#imageBox");ib.querySelector("a img").src="https://img.youtube.com/vi/"+selt+"/hqdefault.jpg";ib.querySelector("a").href="https://www.youtube.com/watch?v="+selt;ib.querySelector("div").innerText="https://www.youtube.com/watch?v="+selt+nl+(itlog[selt]===undefined?"":itlog[selt]+nl)+vilog[selt].replace(/, /g,nl);selectByYtvid.innerText=(document.querySelector("#textBox div").innerText.match(RegExp("⚪.+?"+selt+"$","m"))?"Sel":"unSel");ib.style.display="block"},150)
+						setTimeout(()=>{const nl=String.fromCharCode(10);const selt=selection.trim();const ib=document.querySelector("#imageBox");ib.querySelector("a img").src="https://img.youtube.com/vi/"+selt+"/hqdefault.jpg";ib.querySelector("a").href="https://www.youtube.com/watch?v="+selt;ib.querySelector("div").innerText="https://www.youtube.com/watch?v="+selt+nl+(itlog[selt]===undefined?"":itlog[selt]+nl)+vilog[selt].replace(/, /g,nl);selectByYtvid.innerText=(document.querySelector("#textBox div").innerText.match(RegExp("⚪.+?"+selt+"$","m"))?"Sel":"unSel");ib.style.maxHeight=document.body.clientHeight-10;ib.style.display="block"},150)
 					}else if (selection.length>30){
 						setTimeout(()=>{toggleLineMarks()},150)
 					}
