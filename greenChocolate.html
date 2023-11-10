@@ -41,7 +41,15 @@
 				if (b.innerHTML.match("ytp-button")){
 					const s=d.createElement("svg");
 					b.appendChild(s);
-					s.outerHTML="<svg width='100' height='100' onmouseenter='this.querySelector(&quot;circle&quot;).style.fillOpacity=1;' onmouseleave='this.querySelector(&quot;circle&quot;).style.fillOpacity=.2;' onclick='parent.window.rmvifrm(&quot;"+ytvid+"&quot;)' style='position:fixed;top:60;right:0'><circle cx='50' cy='50' r='50' style='fill:mediumseagreen;fill-opacity:.2'/><title>Remove this video from this page</title></svg>";
+					s.outerHTML="<svg width='100' height='100' onmouseenter='psSlider.style.display=(psSlider.style.display===&quot;none&quot;?&quot;block&quot;:&quot;none&quot;);this.querySelector(&quot;circle&quot;).style.fillOpacity=1;' onmouseleave='this.querySelector(&quot;circle&quot;).style.fillOpacity=.2;' onclick='parent.window.rmvifrm(&quot;"+ytvid+"&quot;)' style='position:fixed;top:60;right:0'><circle cx='50' cy='50' r='50' style='fill:mediumseagreen;fill-opacity:.2'/><title>Remove this video from this page</title></svg>";
+					const sli=d.createElement("div");
+					b.appendChild(sli);
+					const h=w.innerHeight-300;
+					const y=[h*3/14,h*7/14,h*11/14];
+					sli.innerHTML="<input type=range min=0.25 step=0.25 max=3.75 value=1 style='position:fixed;top:200px;right:54px;width:calc(100vh - 300px);transform:rotate(270deg);transform-origin: top right;' oninput=document.getElementsByTagName('video')[0].playbackRate=event.target.value; ontouchstart=event.stopPropagation();><svg id=VisCue style='position:fixed;top:200;right:0;width:40;height:calc(100vh - 300px);'><polygon points='0,"+y[0]+" 9,"+(y[0]-5)+" 9,"+(y[0]+5)+"' style=fill:gray;stroke:white;stroke-width:1 /><polygon points='0,"+y[1]+" 9,"+(y[1]-5)+" 9,"+(y[1]+5)+"' style=fill:gray;stroke:white;stroke-width:1 /><polygon points='0,"+y[2]+" 9,"+(y[2]-5)+" 9,"+(y[2]+5)+"' style=fill:gray;stroke:white;stroke-width:1 /></svg>";
+					sli.setAttribute("onwheel","event.preventDefault();const s=this.querySelector('input');s.value=Math.min(Math.max(0.25,Number(s.value)+(event.deltaY*-0.0025)),3.75);document.getElementsByTagName('video')[0].playbackRate=s.value;");
+					sli.style.display="none";
+					sli.id="psSlider";
 				}
 			}
 		});
