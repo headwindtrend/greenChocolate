@@ -13,6 +13,21 @@ greenChocolate's advantages over an ordinary youtube playlist are:
 i've tested it in win10 msedge and android google chrome, both worked fine. (my galaxy device does let me drag&drop across windows, that's the prerequisite, unfortunately, for android browsers to use greenChocolate.)
 
 change log:
+* 2023 Nov 16&nbsp;&nbsp;&nbsp;&nbsp;added a feature to automatically set "the best" speed for the youtube video that is starting to play on the greenChocolate playground. you have to define "the best" playback speeds for different channels if you want them to be playing in different default speed than 1 (the normal speed). use the hotkey `alt+s` to edit the setting. and here below is a sample.  
+  ```Sample
+  HISTORY (Ancient Aliens) >> 2.5
+  HISTORY >> 2
+  Real Science >> 1.75
+  SciShow >> 1.5
+  Steve Mould >> 1.5
+  Stuff Made Here >> 1.75
+  Veritasium >> 1.5
+  otherwise >> 1
+  ```  
+  **_note (1)_** if the youtube video doesn't match any of the preset defaults, the `otherwise` default speed at the end of the list will be applied.  
+  **_note (2)_** some channel may have various series of videos that you may want to have more than one default speed per channel. the first two lines in the sample above is the way to achieve it. so, you can have as many different default speeds for a channel as you want, even though one default speed per channel is mostly enough.  
+  **_note (3)_** no need to give the full name of the channel, just the significant part is enough, if its full name is unnecessarily long. and all matchings are case insensitive.  
+  **_note (4)_** the matching is all by regexp, so be minded when you need to use the symbols that may clash with regexp. and on the other hand, you can make a very complex matching pattern by regexp if you need to.
 * 2023 Nov 10&nbsp;&nbsp;&nbsp;&nbsp;added a handy vertical slider for you to change the video playback speed. it has 14 levels from the slowest at 0.25 to the fastest at 3.75 (and up/down per every 0.25) while default at 1 (normal speed). you may show/hide it by mouse hover the green transparent spot. you can change its value by click, or drag, or scroll. click or drag is pretty intuitive, nothing needs to talk about. for scroll though, you need to know the effective area where your mouse pointer is. it's not as narrow as the slider is, the effective area is actually all the way extended to the right edge of the player window from the slider.
 * 2023 Oct 24&nbsp;&nbsp;&nbsp;&nbsp;a cosmetic adjustment regarding "to hide the popped up youtube play button when the video play is about to start".
 * 2023 Oct 23&nbsp;&nbsp;&nbsp;&nbsp;the logging sub-system wasn't well tested for the scenario when the window is too small. this adjustment can make it better in coping with a smaller window environment.
