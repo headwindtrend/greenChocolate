@@ -133,6 +133,27 @@
 			d.querySelector(".ytp-cued-thumbnail-overlay").dispatchEvent(new MouseEvent("click",{view:window,bubbles:true,cancelable:true,clientX:200,clientY:200,button:0}));
 			itlog[ytvid]=d.querySelector(".ytp-title-expanded-title").innerText+nl+d.querySelector(".ytp-title-text").innerText+nl+"Length "+d.querySelector(".ytp-time-duration").innerText;
 			localStorage.setItem("playground.itlog",JSON.stringify(itlog));
+			const dspds=localStorage.getItem("playground.defaultSpeeds");
+			if (dspds){
+				const channelName=d.querySelector(".ytp-title-expanded-title").innerText;
+				let yetMatch="";
+				dspds.split(RegExp("(?<=^.+?)>>[^>].+$","mg")).forEach(pattern=>{
+					if (!yetMatch&&channelName.match(RegExp(pattern.replace(/[(].+[)]/,"").trim(),"i"))){
+						if (pattern.match(/[(].+[)]/)){
+							const videoTitle=d.querySelector(".ytp-title-text").innerText;
+							if (videoTitle.match(RegExp(pattern.replace(/^[^(]+[(](.+)[)].*$/,"$1").trim(),"i"))) yetMatch=pattern.trim();
+						}else{yetMatch=pattern.trim();}
+					}
+				});
+				if (!yetMatch){
+					const other=(dspds.match(RegExp("(?<=^ *(?:otherwise|else) *>> *)[^ ]+(?= *$)","im"))||[]).toString();
+					if (other) d.getElementsByTagName('video')[0].playbackRate=other;
+				}else{
+					const lm=String.fromCharCode(92);
+					const match=(dspds.match(RegExp("(?<=^ *"+yetMatch.replace(RegExp(lm+"W","g"),lm+'$&')+" *>> *)[^ ]+(?= *$)","im"))||[]).toString();
+					if (match) d.getElementsByTagName('video')[0].playbackRate=match;
+				}d.querySelector('#psSlider input').value=d.getElementsByTagName('video')[0].playbackRate;
+			}
 			if (showPlaySpeedPanel){
 				const sb=d.querySelector(".ytp-settings-button");
 				const rect=sb.getBoundingClientRect();
@@ -248,6 +269,14 @@
 		const nl=String.fromCharCode(10);
 		return [...new Set(theText.split(nl))].join(nl)
 	}
+	function editDefaultSpeeds(){
+		if (document.querySelector("#defSpeeds")) return;
+		const ta=document.createElement("textarea");
+		document.body.appendChild(ta);
+		ta.outerHTML="<textarea id='defSpeeds' placeholder='Default Playback Speeds setting' onfocusout='localStorage.setItem(&quot;playground.defaultSpeeds&quot;,this.value);this.remove()' style='width:300;height:300;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%)'>"+(localStorage.getItem("playground.defaultSpeeds")||"")+"</textarea>";
+		defSpeeds.style.maxHeight=document.body.clientHeight-20;
+		defSpeeds.focus();
+	}
 </script>
 <body ondblclick="showTxLog();" style="background:chocolate;color:white;font-size:20">
 	<div id="textBox" style="display:none;width:800;border:3px solid black;padding:10;background-color:lightgray;color:black;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%)" ondblclick="event.stopPropagation();">
@@ -278,7 +307,7 @@
 		var vilog=JSON.parse(localStorage.getItem("playground.vilog")||"{}");
 		var itlog=JSON.parse(localStorage.getItem("playground.itlog")||"{}");
 		document.querySelector("#textBox div").onscroll=function(){jumpBottom(this,document.querySelector("#jumpBottomButton"))};
-		window.onkeyup=function(e){if (e.key===";"&&e.ctrlKey){showTxLog()}else if (e.key==="a"&&e.ctrlKey){if (textBox.style.display!=="none"){const tbi=document.querySelector("#textBox div");toggleLineMarks(tbi.innerText,tbi)}}else if (e.key==="Enter"&&e.altKey){importYtvids();}else if (e.key===String.fromCharCode(92)&&e.altKey){exportYtvids();}};
+		window.onkeyup=function(e){if (e.key===";"&&e.ctrlKey){showTxLog()}else if (e.key==="a"&&e.ctrlKey){if (textBox.style.display!=="none"){const tbi=document.querySelector("#textBox div");toggleLineMarks(tbi.innerText,tbi)}}else if (e.key==="Enter"&&e.altKey){importYtvids();}else if (e.key===String.fromCharCode(92)&&e.altKey){exportYtvids();}else if (e.key==="s"&&e.altKey){editDefaultSpeeds();}};
 		var ondblclickDisabled=false;
 		document.addEventListener("mouseup",(event)=>{
 			if (getSelection().toString()&&imageBox.contains(sel_anchNode())){return}
