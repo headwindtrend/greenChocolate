@@ -277,8 +277,21 @@
 		defSpeeds.style.maxHeight=document.body.clientHeight-20;
 		defSpeeds.focus();
 	}
+	function updateVisCues(){
+		document.querySelectorAll("iframe").forEach(ifrm=>{
+			const w=ifrm.contentWindow;
+			const h=w.innerHeight-300;
+			const y=[h*3/14,h*7/14,h*11/14];
+			const s=w.document.getElementById("psSlider");
+			if (s){
+				const v=s.querySelector("#VisCue");
+				if (v) v.remove();
+				s.innerHTML+="<svg id=VisCue style='position:fixed;top:200;right:0;width:40;height:calc(100vh - 300px);'><polygon points='0,"+y[0]+" 9,"+(y[0]-5)+" 9,"+(y[0]+5)+"' style=fill:gray;stroke:white;stroke-width:1 /><polygon points='0,"+y[1]+" 9,"+(y[1]-5)+" 9,"+(y[1]+5)+"' style=fill:gray;stroke:white;stroke-width:1 /><polygon points='0,"+y[2]+" 9,"+(y[2]-5)+" 9,"+(y[2]+5)+"' style=fill:gray;stroke:white;stroke-width:1 /></svg>"
+			}
+		});
+	}
 </script>
-<body ondblclick="showTxLog();" style="background:chocolate;color:white;font-size:20">
+<body ondblclick="showTxLog();" onresize="if (window.location.host==='www.youtube.com') updateVisCues();" style="background:chocolate;color:white;font-size:20">
 	<div id="textBox" style="display:none;width:800;border:3px solid black;padding:10;background-color:lightgray;color:black;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%)" ondblclick="event.stopPropagation();">
 		<button onclick="if (check_lines_sel()){this.parentNode.style.display='none'}" style="position:absolute;top:5;right:30;background-color:red;font-size:30;">&#215;</button>
 		<button id="rButt" onclick="remove_marked_lines()" style="display:none;position:absolute;top:50%;right:30;transform:translateY(-50%);background-color:red;color:lightgray;font-size:30;font-weight:bold;">R</button>
