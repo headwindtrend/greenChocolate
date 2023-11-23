@@ -13,6 +13,7 @@ greenChocolate's advantages over an ordinary youtube playlist are:
 i've tested it in win10 msedge and android google chrome, both worked fine. (my galaxy device does let me drag&drop across windows, that's the prerequisite, unfortunately, for android browsers to use greenChocolate.)
 
 change log:
+* 2023 Nov 22&nbsp;&nbsp;&nbsp;&nbsp;there is a ruler (sort of) next to the vertical slider as an auxiliary visual cue for playback speed tuning, that is, those 3 little triangles marking for the speed of one, two and three. while the slider can be resized automatically as the window size is changed (for instance, rotating the screen between portrait and landscape), the ruler didn't resize accordingly. so, this is the replenishment for the omission.
 * 2023 Nov 16&nbsp;&nbsp;&nbsp;&nbsp;added a feature to automatically set "the best" speed for the youtube video that is starting to play on the greenChocolate playground. you have to define "the best" playback speeds for different channels if you want them to be playing in different default speed than 1 (the normal speed). use the hotkey `alt+s` to edit the setting. and here below is a sample.  
   ```Sample
   HISTORY (Ancient Aliens) >> 2.5
