@@ -33,3 +33,5 @@ for those things outside of the logging sub-system, please refer to the readme o
 - **for a range of consecutive lines**, by highlighting those targeting lines. as soon as the highlighting operation is completed, all the marks (i.e. the black/white circles) within the highlighted range will be toggled. you may also toggle all by the hotkey `ctrl+a`. for example, let's say you have 5000 lines in the log, and you want to delete all of them except the recent 100 lines. you may `ctrl+a` to highlight all (thus all the lines are marked as a result), and select the last 100 lines to unmark them, and finally click the `R` button to proceed remove.
 
 **note:** the "highlighting" i mentioned above means an ordinary text selection operation, which starts by moving your mouse to the beginning of the range, and press and hold the mouse button, and drag to the end of the range, and complete it by releasing the mouse button.
+
+If you appreciate my work, i will be very grateful if you can support my work by making small sum donation thru PayPal with `Send payment to` entered as `headwindtrend@gmail.com`. Thank you very much for your support.
