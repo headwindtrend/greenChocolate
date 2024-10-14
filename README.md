@@ -12,6 +12,8 @@ greenChocolate's advantages over an ordinary youtube playlist are:
 
 i've tested it in win10 msedge and android google chrome, both worked fine. (my galaxy device does let me drag&drop across windows, that's the prerequisite, unfortunately, for android browsers to use greenChocolate.)
 
+If you appreciate my work, i will be very grateful if you can support my work by making small sum donation thru PayPal with `Send payment to` entered as `headwindtrend@gmail.com`. Thank you very much for your support.
+
 change log:
 * 2024 Jul 23&nbsp;&nbsp;&nbsp;&nbsp;added a feature to enable user to adjust the playback speed by touch operation. just start the touch from the transparent green spot and while your finger is still in touch with the screen, slide it somewhere (horizontally, vertically, diagonally, whatever you like, it doesn't matter) and you will see a number representing your target playback speed is shown in the center of the display and is changing (increasing/decreasing) as your finger sliding back and forth (relative to the transparent green spot). and when your target speed is shown, leave your finger off the screen. in turn, the playback speed will be set accordingly.
 * 2023 Nov 22&nbsp;&nbsp;&nbsp;&nbsp;there is a ruler (sort of) next to the vertical slider as an auxiliary visual cue for playback speed tuning, that is, those 3 little triangles marking for the speed of one, two and three. while the slider can be resized automatically as the window size is changed (for instance, rotating the screen between portrait and landscape), the ruler didn't resize accordingly. so, this is the replenishment for the omission.
